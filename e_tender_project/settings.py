@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -120,7 +121,33 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+
+]
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 STATIC_URL = '/static/'
 
 
 AUTH_USER_MODEL = 'e_tender_api.UserProfile'
+
+AWS_ACCESS_KEY_ID = 'AKIA2URKZZ5ZLQCU4MJ7'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'myfypbucket'
+AWS_S3_SIGNATURE_VERSION = 's3v4'
+AWS_S3_REGION_NAME = 'us-east-2'
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+AWS_S3_VERIFY = True
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'fa17-bcs-081@cuilahore.edu.pk'
+EMAIL_HOST_PASSWORD = 'FA17-BCS-081'
+EMAIL_PORT = 587
