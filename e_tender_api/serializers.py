@@ -91,7 +91,7 @@ class PublishTenderSerializer(serializers.ModelSerializer):
         message = 'Thank you for publishing your tender'
         to_email = email
         send_mail(mail_subject, json.dumps(message),
-                  "fa17-bcs-081@cuilahore.edu.pk", [to_email])
+                  "maamna24@gmail.com", [to_email])
         return tender
 
 
