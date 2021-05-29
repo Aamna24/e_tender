@@ -65,7 +65,7 @@ class PublishTenderSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Tenders
         fields = ('id', 'organization_name', 'category', 'title', 'availibility', 'region',
-                  'description', 'contact', 'opening_date', 'last_date', 'datepublished', 'file_uploaded', 'email')
+                  'description', 'contact', 'opening_date', 'last_date', 'datepublished', 'file_uploaded', 'email', 'assigned_to')
 
     def create(self, validated_data):
         request = self.context.get('request')
@@ -81,6 +81,7 @@ class PublishTenderSerializer(serializers.ModelSerializer):
             opening_date=validated_data['opening_date'],
             last_date=validated_data['last_date'],
             email=validated_data['email'],
+            assigned_to=validated_data['assigned_to'],
             file_uploaded=request.FILES.get('file_uploaded', default=''),
 
 

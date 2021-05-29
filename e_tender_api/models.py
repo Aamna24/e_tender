@@ -101,6 +101,7 @@ class Tenders(models.Model):
     last_date = models.DateField(default='')
     datepublished = models.DateField(auto_now_add=True)
     email = models.EmailField(max_length=255, default='')
+    assigned_to = models.CharField(max_length=255, default='')
     file_uploaded = models.FileField(upload_to='uploads', default='')
 
 

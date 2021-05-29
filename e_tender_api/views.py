@@ -30,6 +30,10 @@ class TenderViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ('category', 'region')
 
+    def patch(self, request, pk=None):
+        """Handle updating part of an object"""
+        return Response({'http_method': 'PATCH'})
+
 # add search fields by keywords category etc
 
 

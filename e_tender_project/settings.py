@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+from decouple import config
+import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +23,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '6!ex(7mvxg&g-&j9$ri9q$!86*)!la-d%axk(w@%u+l_u*uepv'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -123,10 +125,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-
-]
+CORS_ORIGIN_ALLOW_ALL = True
 
 
 MEDIA_URL = '/media/'
@@ -137,9 +136,9 @@ STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'e_tender_api.UserProfile'
 
-AWS_ACCESS_KEY_ID = 'AKIA2URKZZ5ZLQCU4MJ7'
-AWS_SECRET_ACCESS_KEY = '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'
-AWS_STORAGE_BUCKET_NAME = 'myfypbucket'
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
 AWS_S3_SIGNATURE_VERSION = 's3v4'
 AWS_S3_REGION_NAME = 'us-east-2'
 AWS_S3_FILE_OVERWRITE = False
@@ -150,6 +149,8 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'maamna24@gmail.com'
-EMAIL_HOST_PASSWORD = 'intelCORE098'
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587
+
+django_heroku.settings(locals())
