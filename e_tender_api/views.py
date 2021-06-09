@@ -38,7 +38,7 @@ class Register(generics.GenericAPIView):
         current_site = get_current_site(request).domain
         relativeLink = reverse('email-verify')
         #absurl='http://'+current_site+relativeLink+"?token="+str(token)
-        absurl='http://localhost:3000/email-verify/'+"?token="+str(token)
+        absurl='https://etender-backend.herokuapp.com/api/email-verify/'+"?token="+str(token)
         email_body = 'Hi '+user.organization_name+' Use link below to verify your email \n'+absurl
         data = {'email_body':email_body, 'to_email': user.email,'email_subject':'Verify your email'}
         Util.send_email(data)
