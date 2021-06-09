@@ -9,8 +9,11 @@ router.register('bid', views.BidViewSet)
 
 
 urlpatterns = [
-    path('login/', views.UserLoginApiView.as_view()),
+   # path('login/', views.UserLoginApiView.as_view()),
     path('', include(router.urls)),
+    path('login/', views.LoginAPIView.as_view(), name="login"),
+    path("register/", views.Register.as_view(), name="register"),
+    path("email-verify/", views.VerifyEmail.as_view(), name="email-verify"),
     path('api-auth/', include('rest_framework.urls'))
 
 ]

@@ -6,6 +6,7 @@ from django.contrib.auth.models import BaseUserManager
 from django.conf import settings
 from django.utils.timezone import now
 from datetime import datetime
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class UserProfileManager(BaseUserManager):
@@ -50,6 +51,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     contact = PhoneNumberField(blank=False, null=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    is_verified = models.BooleanField(default=False)
 
     objects = UserProfileManager()
 
@@ -68,6 +70,13 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         """Return string representation of user"""
         return self.email
+
+    def tokens(self):
+       refresh = RefreshToken.for_user(self) 
+       return {
+           'refresh':str(refresh),
+           'access':str(refresh.access_token)
+       }
 
 
 class Tenders(models.Model):

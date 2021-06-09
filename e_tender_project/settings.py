@@ -28,7 +28,7 @@ SECRET_KEY = config('SECRET_KEY','6!ex(7mvxg&g-&j9$ri9q$!86*)!la-d%axk(w@%u+l_u*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = ['']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -153,5 +153,8 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587
+
+
+
 
 django_heroku.settings(locals())

@@ -7,57 +7,12 @@ from .models import UserProfile
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
+from django.contrib import auth
+from rest_framework.exceptions import AuthenticationFailed
 
 
-class HelloSerializer(serializers.Serializer):
-    """Serializes a name field for testing our API view"""
-    name = serializers.CharField(max_length=10)
 
 
-class UserProfileSerializer(serializers.ModelSerializer):
-    """Serializes a user profile object"""
-
-    class Meta:
-        model = models.UserProfile
-        fields = ('id', 'organization_name', 'email',
-                  'password', 'ntn', 'contact', 'address')
-        extra_kwargs = {
-            'password': {
-                'write_only': True,
-                'style': {"input_type": 'password'}
-            }
-        }
-
-    def create(self, validated_data):
-        """Create and return a new user"""
-        user = models.UserProfile.objects.create_user(
-
-            organization_name=validated_data['organization_name'],
-            password=validated_data['password'],
-            email=validated_data['email'],
-            ntn=validated_data['ntn'],
-            contact=validated_data['contact'],
-            address=validated_data['address'],
-        )
-        return user
-
-    def update(self, instance, validated_data):
-        """Handle updating user account"""
-        if 'password' in validated_data:
-            password = validated_data.pop('password')
-            instance.set_password(password)
-
-        return super().update(instance, validated_data)
-
-
-class ProfileFeeditemSerializer(serializers.ModelSerializer):
-    """Serializers profile feed itmes"""
-    class Meta:
-        model = models.ProfileFeedItem
-        fields = ('id', 'user_profile', 'status_text', 'created_on')
-        extra_kwargs = {
-            'user_profile': {'read_only': True}
-        }
 
 
 class PublishTenderSerializer(serializers.ModelSerializer):
@@ -125,3 +80,70 @@ class PostBidSerializer(serializers.ModelSerializer):
         send_mail(mail_subject, json.dumps(message),
                   "fa17-bcs-081@cuilahore.edu.pk", [to_email])
         return bid
+
+
+class EmailVerificationSerializer(serializers.ModelSerializer):
+    token = serializers.CharField(max_length=255)
+
+    class Meta:
+        model = models.UserProfile
+        fields=['token']
+
+
+class LoginSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(max_length=255, min_length=3)
+    password = serializers.CharField(max_length=10, min_length=4, write_only=True)
+    organization_name= serializers.CharField(max_length=255,min_length=4,read_only=True)
+    token = serializers.CharField(max_length=255,min_length=4,read_only=True)
+    class Meta:
+        model = models.UserProfile
+        fields = ['email','password','organization_name','token']
+  
+    def validate(self, attrs):
+        email = attrs.get('email','')
+        password = attrs.get('password','')
+
+        user = auth.authenticate(email = email, password=password)
+
+        if not user:
+            raise AuthenticationFailed('Invalid credentials, try again')
+
+        if not user.is_active:
+            raise AuthenticationFailed('Account disabled, contact admin')
+        if not user.is_verified:  
+            raise AuthenticationFailed('Email Verification required')
+        
+        return {
+            'email':user.email,
+            'organization_name':user.organization_name,
+            'tokens':user.tokens
+        }
+        
+        return super().validate(attrs)
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    """Serializes a user profile object"""
+
+    class Meta:
+        model = models.UserProfile
+        fields = ('id', 'organization_name', 'email',
+                  'password', 'ntn', 'contact', 'address')
+        extra_kwargs = {
+            'password': {
+                'write_only': True,
+                'style': {"input_type": 'password'}
+            }
+        }
+
+    
+
+    def validate(self, attrs):
+        email = attrs.get('email','')
+        organization_name = attrs.get('organization_name', '')
+        contact = attrs.get('contact', '')
+        address = attrs.get('address', '')
+        ntn = attrs.get('ntn', '')
+
+        return attrs
+    def create(self, validated_data):
+        return models.UserProfile.objects.create_user(**validated_data)
