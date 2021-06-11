@@ -14,6 +14,9 @@ urlpatterns = [
     path('login/', views.LoginAPIView.as_view(), name="login"),
     path("register/", views.Register.as_view(), name="register"),
     path("email-verify/", views.VerifyEmail.as_view(), name="email-verify"),
-    path('api-auth/', include('rest_framework.urls'))
+    path('api-auth/', include('rest_framework.urls')),
+    path('request-reset-email/', views.RequestPasswordResetEmail.as_view(), name='request-reset-email'),
+    path('password-reset/<uidb64>/<token>/',views.PasswordtokenCheckAPI.as_view(), name='password-reset-confirm'),
+    path('password-reset-complete/<uidb64>/<token>/',views.SetNewPassword.as_view(), name='password-reset-complete')
 
 ]
