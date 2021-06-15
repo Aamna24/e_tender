@@ -45,8 +45,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     """Database model for users in the system"""
     email = models.EmailField(max_length=255, unique=True)
     organization_name = models.CharField(max_length=255, unique=True)
-    # password=models.CharField(max_length=250,default='')
-    ntn = models.CharField(max_length=15, unique=True)
+    ntn = models.CharField(max_length=15, unique=True,)
     address = models.CharField(max_length=100)
     contact = PhoneNumberField(blank=False, null=False)
     is_active = models.BooleanField(default=True)
@@ -138,3 +137,5 @@ class Bid(models.Model):
     file_uploaded = models.FileField(upload_to='uploads', default='')
     postedBy = models.CharField(max_length=50, default="")
     status = models.CharField(max_length=50, default="")
+    email =  models.EmailField(max_length=255, default='')
+

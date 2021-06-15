@@ -60,7 +60,7 @@ class PostBidSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Bid
         fields = ('id', 'name', 'no_of_days', 'bidding_amount',
-                  'contact', 'tenderId', 'title', 'file_uploaded', 'postedBy', 'status')
+                  'contact', 'tenderId', 'title', 'file_uploaded', 'postedBy', 'status','email')
 
     def create(self, validated_data):
         request = self.context.get('request')
@@ -75,15 +75,19 @@ class PostBidSerializer(serializers.ModelSerializer):
             file_uploaded=request.FILES.get('file_uploaded', default=''),
             postedBy=validated_data['postedBy'],
             status=validated_data['status'],
+            email=validated_data['email'],
 
         )
+        email = request.data['email']
+        title = request.data['title']
 
         bid.save()
-        mail_subject = 'Tender Published'
-        message = 'Your bid has been placed on Tender Title'
-        to_email = 'aamna.majid@gmail.com'
+
+        mail_subject = 'Bid Placed'
+        message = 'Your bid has been placed on Tender Title '+title
+        to_email = email
         send_mail(mail_subject, json.dumps(message),
-                  "fa17-bcs-081@cuilahore.edu.pk", [to_email])
+                  "maamna24@gmail.com", [to_email])
         return bid
 
 

@@ -31,7 +31,8 @@ class Register(generics.GenericAPIView):
 
     
     def post(self, request):
-        user = request.data
+        print(request.data['values'])
+        user = request.data['values']
         serializer = self.serializer_class(data=user)  
         serializer.is_valid(raise_exception=True)
         serializer.save()  
