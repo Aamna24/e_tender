@@ -104,7 +104,7 @@ class Tenders(models.Model):
         max_length=10, default="active", blank=False)
     region = models.CharField(max_length=20, default='', blank=False)
     description = models.TextField(default='', blank=False)
-    contact = PhoneNumberField(blank=False, null=True, default=0)
+    contact = PhoneNumberField(blank=False, null=True, default=0,unique=True)
     opening_date = models.DateField(default='')
     last_date = models.DateField(default='')
     datepublished = models.DateField(auto_now_add=True)
